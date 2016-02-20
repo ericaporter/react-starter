@@ -3,6 +3,7 @@ var morgan = require('morgan');
 var serveStatic = require('serve-static')
 var bodyParser = require('body-parser');
 var path = require('path');
+var _ = require('underscore');
 
 // web app middleware
 var app = express();
@@ -38,11 +39,13 @@ var docs = [{
 
 // GET ./api/docs
 router.get('/doc', function(req, res) {
+    console.log("request", res);
 	res.send(docs);
 })
 
 // GET ./api/doc/:id
 router.get('/doc/:id', function(req, res) {
+    console.log("request", req);
     res.send(_.where(docs, {
         id: req.params.id
     }));
