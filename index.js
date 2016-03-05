@@ -4,6 +4,17 @@ var serveStatic = require('serve-static')
 var bodyParser = require('body-parser');
 var path = require('path');
 var _ = require('underscore');
+var Twitter = require('twitter');
+ 
+var client = new Twitter({
+      consumer_key: 'NKfT8pA9dpWhHtgdfWfTvyu9w',
+      consumer_secret: 'iVYB3T2yGBBBrtBk09ye8jCaCQV557oXT0Ak4BmkfV0O8drjku',
+      access_token_key: '22636772-26FJrR5V2L398WphYvLOjHnbmhvOc5l4DgHDHDprC',
+      access_token_secret: 'qYixx3FGGLZyZ9oTnzFR3A1fzuNVkoQm0UmrObKZu4ibK'
+});
+
+var params = {screen_name: 'AiLiLondon'};
+
 
 // web app middleware
 var app = express();
@@ -37,18 +48,32 @@ var docs = [{
     body: "Aliquizzle cool, yippiyo izzle blandizzle sheezy, nibh fo shizzle tempizzle dizzle, my shizz mollis magna phat pellentesque est. Maecenas placerat, libero daahng dawg euismizzle crazy, ipsum yo gravida that's the shizzle, izzle vehicula nisl ass owned tellivizzle. Away nulla bling bling, imperdiet quizzle, uhuh ... yih! volutpizzle, pulvinar i saw beyonces tizzles and my pizzle went crizzle, pede. Vivamizzle funky fresh. Curabitizzle placerizzle, daahng dawg quis cursizzle sheezy."
 }, ];
 
-// GET ./api/docs
+// GET ./api/doc
 router.get('/doc', function(req, res) {
-    console.log("request", res);
+    // console.log("request", res);
 	res.send(docs);
 })
 
 // GET ./api/doc/:id
 router.get('/doc/:id', function(req, res) {
-    console.log("request", req);
+    // console.log("request", req);
     res.send(_.where(docs, {
         id: req.params.id
     }));
+})
+
+router.get('/tweet', function(req, res) {
+    // console.log("request", res);
+    // res.send(docs);
+    client.get('statuses/user_timeline', params, function(error, tweets, response){
+        if (!error) {
+              res.send(tweets);
+                }
+        else {
+          res.send(error);
+        }
+    });
+
 })
 
 app.use('/api', router);
